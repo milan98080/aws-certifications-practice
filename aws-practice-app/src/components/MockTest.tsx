@@ -4,6 +4,7 @@ import './MockTest.css';
 
 interface MockTestProps {
   questions: Question[];
+  testName: string;
 }
 
 interface ShuffledChoice {
@@ -29,7 +30,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   return shuffled;
 };
 
-const MockTest: React.FC<MockTestProps> = ({ questions }) => {
+const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
   const [testQuestions, setTestQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [testAnswers, setTestAnswers] = useState<TestAnswer[]>([]);
@@ -252,7 +253,7 @@ const MockTest: React.FC<MockTestProps> = ({ questions }) => {
     return (
       <div className="mock-test-start">
         <div className="test-info">
-          <h2>🎯 Mock Test</h2>
+          <h2>🎯 {testName} - Mock Test</h2>
           <div className="test-details">
             <div className="detail-item">
               <span className="detail-label">Questions:</span>

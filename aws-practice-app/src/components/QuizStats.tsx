@@ -6,13 +6,15 @@ interface QuizStatsProps {
   totalQuestions: number;
   correctAnswers: number;
   onRestart: () => void;
+  testName: string;
 }
 
 const QuizStats: React.FC<QuizStatsProps> = ({ 
   currentQuestion, 
   totalQuestions, 
   correctAnswers,
-  onRestart 
+  onRestart,
+  testName
 }) => {
   const progress = (currentQuestion / totalQuestions) * 100;
   const accuracy = currentQuestion > 0 ? (correctAnswers / currentQuestion) * 100 : 0;
@@ -20,7 +22,7 @@ const QuizStats: React.FC<QuizStatsProps> = ({
   return (
     <div className="quiz-stats">
       <div className="stats-container">
-        <h1>AWS Solutions Architect Practice</h1>
+        <h1>{testName}</h1>
         
         <div className="progress-bar-inline">
           <div 

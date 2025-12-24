@@ -5,6 +5,7 @@ import { Question } from '../types';
 
 interface RandomPracticeProps {
   questions: Question[];
+  testName: string;
 }
 
 // Fisher-Yates shuffle algorithm
@@ -17,7 +18,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   return shuffled;
 };
 
-const RandomPractice: React.FC<RandomPracticeProps> = ({ questions }) => {
+const RandomPractice: React.FC<RandomPracticeProps> = ({ questions, testName }) => {
   const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -71,6 +72,7 @@ const RandomPractice: React.FC<RandomPracticeProps> = ({ questions }) => {
         totalQuestions={shuffledQuestions.length}
         correctAnswers={correctAnswers}
         onRestart={handleRestart}
+        testName={testName}
       />
       
       {currentQuestionIndex < shuffledQuestions.length && (

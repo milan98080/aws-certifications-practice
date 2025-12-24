@@ -175,13 +175,13 @@ function App() {
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'random':
-        return <RandomPractice questions={questions} />;
+        return <RandomPractice questions={questions} testName={selectedTest.name} />;
       case 'mock':
-        return <MockTest questions={questions} />;
+        return <MockTest questions={questions} testName={selectedTest.name} />;
       case 'practice':
-        return <PracticeMode questions={questions} />;
+        return <PracticeMode questions={questions} testName={selectedTest.name} />;
       default:
-        return <RandomPractice questions={questions} />;
+        return <RandomPractice questions={questions} testName={selectedTest.name} />;
     }
   };
 

@@ -4,6 +4,7 @@ import './PracticeMode.css';
 
 interface PracticeModeProps {
   questions: Question[];
+  testName: string;
 }
 
 interface ShuffledChoice {
@@ -21,7 +22,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   return shuffled;
 };
 
-const PracticeMode: React.FC<PracticeModeProps> = ({ questions }) => {
+const PracticeMode: React.FC<PracticeModeProps> = ({ questions, testName }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(new Set());
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string[]>>({});
@@ -234,7 +235,7 @@ const PracticeMode: React.FC<PracticeModeProps> = ({ questions }) => {
   return (
     <div className="practice-mode">
       <div className="practice-header">
-        <h2>📚 Practice Mode</h2>
+        <h2>📚 {testName} - Practice Mode</h2>
         <div className="page-info">
           Page {currentPage} of {totalPages} • Questions {startIndex + 1}-{Math.min(endIndex, questions.length)} of {questions.length}
         </div>
