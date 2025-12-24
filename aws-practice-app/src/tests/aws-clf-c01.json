@@ -1,0 +1,86 @@
+{
+  "exam_id": 33,
+  "total_pages_attempted": 10,
+  "successful_pages": 10,
+  "failed_pages": 0,
+  "total_questions": 50,
+  "extraction_date": "2025-12-24T07:17:42.806Z",
+  "extraction_method": "sample_data",
+  "questions": [
+    {
+      "question_id": "sample1",
+      "question_number": 1,
+      "page": 1,
+      "question_text": "What is the AWS service that provides scalable compute capacity in the cloud?",
+      "choices": {
+        "A": "Amazon S3",
+        "B": "Amazon EC2",
+        "C": "Amazon RDS",
+        "D": "Amazon VPC"
+      },
+      "correct_answer": "B",
+      "answer_ET": "B",
+      "answers_community": ["B (95%)", "5%"],
+      "topic": "1",
+      "exam_id": 33,
+      "is_multiple_choice": false,
+      "url": "https://example.com/sample",
+      "question_images": [],
+      "answer_images": [],
+      "timestamp": "2025-12-24 10:00:00",
+      "unix_timestamp": 1735027200,
+      "discussion_count": 5,
+      "discussion": []
+    },
+    {
+      "question_id": "sample2",
+      "question_number": 2,
+      "page": 1,
+      "question_text": "Which AWS service is used for object storage?",
+      "choices": {
+        "A": "Amazon EBS",
+        "B": "Amazon EFS",
+        "C": "Amazon S3",
+        "D": "Amazon Glacier"
+      },
+      "correct_answer": "C",
+      "answer_ET": "C",
+      "answers_community": ["C (98%)", "2%"],
+      "topic": "1",
+      "exam_id": 33,
+      "is_multiple_choice": false,
+      "url": "https://example.com/sample",
+      "question_images": [],
+      "answer_images": [],
+      "timestamp": "2025-12-24 10:00:00",
+      "unix_timestamp": 1735027200,
+      "discussion_count": 3,
+      "discussion": []
+    },
+    {
+      "question_id": "sample3",
+      "question_number": 3,
+      "page": 1,
+      "question_text": "What does the AWS shared responsibility model define? (Choose two.)",
+      "choices": {
+        "A": "AWS is responsible for the security of the cloud infrastructure",
+        "B": "Customers are responsible for securing their data",
+        "C": "AWS manages all security aspects",
+        "D": "Customers are responsible for physical security of data centers"
+      },
+      "correct_answer": "AB",
+      "answer_ET": "AB",
+      "answers_community": ["AB (92%)", "8%"],
+      "topic": "1",
+      "exam_id": 33,
+      "is_multiple_choice": true,
+      "url": "https://example.com/sample",
+      "question_images": [],
+      "answer_images": [],
+      "timestamp": "2025-12-24 10:00:00",
+      "unix_timestamp": 1735027200,
+      "discussion_count": 8,
+      "discussion": []
+    }
+  ]
+}

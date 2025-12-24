@@ -1,0 +1,26 @@
+{
+  "tests": [
+    {
+      "id": "aws-saa-c03",
+      "name": "AWS Solutions Architect Associate (SAA-C03)",
+      "description": "AWS Certified Solutions Architect Associate exam practice questions",
+      "category": "AWS",
+      "difficulty": "Associate",
+      "filename": "aws-saa-c03.json",
+      "totalQuestions": 1019,
+      "timeLimit": 130,
+      "passingScore": 72
+    },
+    {
+      "id": "aws-clf-c01",
+      "name": "AWS Cloud Practitioner (CLF-C01)",
+      "description": "AWS Certified Cloud Practitioner foundational exam practice questions",
+      "category": "AWS",
+      "difficulty": "Foundational",
+      "filename": "aws-clf-c01.json",
+      "totalQuestions": 50,
+      "timeLimit": 90,
+      "passingScore": 70
+    }
+  ]
+}
