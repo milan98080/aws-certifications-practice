@@ -21,6 +21,28 @@
       "totalQuestions": 555,
       "timeLimit": 120,
       "passingScore": 72
+    },
+    {
+      "id": "aws-dop-c02",
+      "name": "AWS Certified DevOps Engineer - Professional (DOP-C02)",
+      "description": "AWS Certified DevOps Engineer - Professional exam practice questions",
+      "category": "AWS",
+      "difficulty": "Professional",
+      "filename": "aws-dop-c02.json",
+      "totalQuestions": 363,
+      "timeLimit": 120,
+      "passingScore": 75
+    },
+    {
+      "id": "aws-sap-c02",
+      "name": "AWS Certified Solutions Architect - Professional (SAP-C02)",
+      "description": "AWS Certified Solutions Architect - Professional exam practice questions",
+      "category": "AWS",
+      "difficulty": "Professional",
+      "filename": "aws-sap-c02.json",
+      "totalQuestions": 529,
+      "timeLimit": 120,
+      "passingScore": 75
     }
   ]
 }
