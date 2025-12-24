@@ -19,34 +19,32 @@ const QuizStats: React.FC<QuizStatsProps> = ({
 
   return (
     <div className="quiz-stats">
-      <div className="stats-header">
+      <div className="stats-container">
         <h1>AWS Solutions Architect Practice</h1>
-        <button className="restart-btn" onClick={onRestart}>
-          Restart Quiz
-        </button>
-      </div>
-      
-      <div className="progress-section">
-        <div className="progress-info">
-          <span>Question {currentQuestion + 1} of {totalQuestions}</span>
-          <span>{Math.round(progress)}% Complete</span>
-        </div>
-        <div className="progress-bar">
+        
+        <div className="progress-bar-inline">
           <div 
             className="progress-fill" 
             style={{ width: `${progress}%` }}
           ></div>
         </div>
-      </div>
-
-      <div className="accuracy-section">
-        <div className="stat-item">
-          <span className="stat-label">Correct:</span>
-          <span className="stat-value">{correctAnswers}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-label">Accuracy:</span>
-          <span className="stat-value">{Math.round(accuracy)}%</span>
+        
+        <div className="stats-right">
+          <div className="inline-stats">
+            <span className="stat-compact">
+              Q {currentQuestion + 1}/{totalQuestions}
+            </span>
+            <span className="stat-compact">
+              <strong>{correctAnswers}</strong> correct
+            </span>
+            <span className="stat-compact">
+              <strong>{Math.round(accuracy)}%</strong>
+            </span>
+          </div>
+          
+          <button className="restart-btn" onClick={onRestart}>
+            Restart
+          </button>
         </div>
       </div>
     </div>

@@ -195,9 +195,23 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onNext, showNextB
     <div className="question-card">
       <div className="question-header">
         <h2>Question {question.question_number}</h2>
-        {isMultipleAnswer && (
-          <span className="multiple-indicator">Multiple Answers</span>
-        )}
+        <div className="header-right">
+          {isMultipleAnswer && !showResult && (
+            <span className="multiple-indicator">Multiple Answers</span>
+          )}
+          {showResult && (
+            <>
+              <div className={`result ${isCorrect() ? 'correct' : 'incorrect'}`}>
+                {isCorrect() ? '✓ Correct!' : '✗ Incorrect'}
+              </div>
+              {showNextButton && (
+                <button className="next-btn-header" onClick={handleNext}>
+                  Next Question
+                </button>
+              )}
+            </>
+          )}
+        </div>
       </div>
       
       <div className="question-text">
@@ -222,25 +236,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onNext, showNextB
         <button className="submit-btn" onClick={handleSubmit}>
           Submit Answer
         </button>
-      )}
-
-      {showNextButton && showResult && (
-        <div className="result-section">
-          <div className={`result ${isCorrect() ? 'correct' : 'incorrect'}`}>
-            {isCorrect() ? '✓ Correct!' : '✗ Incorrect'}
-          </div>
-          <button className="next-btn" onClick={handleNext}>
-            Next Question
-          </button>
-        </div>
-      )}
-
-      {!showNextButton && showResult && (
-        <div className="result-section">
-          <div className={`result ${isCorrect() ? 'correct' : 'incorrect'}`}>
-            {isCorrect() ? '✓ Correct!' : '✗ Incorrect'}
-          </div>
-        </div>
       )}
     </div>
   );

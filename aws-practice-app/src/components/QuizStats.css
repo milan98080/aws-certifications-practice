@@ -1,56 +1,33 @@
 .quiz-stats {
   background: white;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
-.stats-header {
+.stats-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.stats-header h1 {
+.stats-container h1 {
   color: #333;
   margin: 0;
-  font-size: 24px;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.restart-btn {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
-}
-
-.restart-btn:hover {
-  background: #545b62;
-}
-
-.progress-section {
-  margin-bottom: 20px;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: #666;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 8px;
+.progress-bar-inline {
+  flex: 1;
+  min-width: 150px;
+  height: 6px;
   background: #e9ecef;
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
 }
 
@@ -60,25 +37,68 @@
   transition: width 0.3s ease;
 }
 
-.accuracy-section {
+.stats-right {
   display: flex;
-  gap: 30px;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
 }
 
-.stat-item {
+.inline-stats {
   display: flex;
-  flex-direction: column;
+  gap: 15px;
   align-items: center;
 }
 
-.stat-label {
-  font-size: 14px;
+.stat-compact {
+  font-size: 13px;
   color: #666;
-  margin-bottom: 4px;
+  white-space: nowrap;
 }
 
-.stat-value {
-  font-size: 20px;
-  font-weight: bold;
+.stat-compact strong {
   color: #333;
+  font-weight: 600;
+}
+
+.restart-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+}
+
+.restart-btn:hover {
+  background: #545b62;
+}
+
+@media (max-width: 1024px) {
+  .stats-container {
+    flex-wrap: wrap;
+  }
+  
+  .progress-bar-inline {
+    order: 3;
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-container h1 {
+    font-size: 1.1rem;
+  }
+  
+  .inline-stats {
+    gap: 10px;
+  }
+  
+  .stat-compact {
+    font-size: 12px;
+  }
 }
