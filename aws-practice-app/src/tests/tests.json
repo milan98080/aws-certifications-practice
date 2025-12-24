@@ -8,19 +8,19 @@
       "difficulty": "Associate",
       "filename": "aws-saa-c03.json",
       "totalQuestions": 1019,
-      "timeLimit": 130,
+      "timeLimit": 120,
       "passingScore": 72
     },
     {
-      "id": "aws-clf-c01",
-      "name": "AWS Cloud Practitioner (CLF-C01)",
-      "description": "AWS Certified Cloud Practitioner foundational exam practice questions",
+      "id": "aws-dva-c02",
+      "name": "AWS Certified Developer - Associate (DVA-C02)",
+      "description": "AWS Certified Developer - Associate exam practice questions",
       "category": "AWS",
-      "difficulty": "Foundational",
-      "filename": "aws-clf-c01.json",
-      "totalQuestions": 50,
-      "timeLimit": 90,
-      "passingScore": 70
+      "difficulty": "Associate",
+      "filename": "aws-dva-c02.json",
+      "totalQuestions": 555,
+      "timeLimit": 120,
+      "passingScore": 72
     }
   ]
 }

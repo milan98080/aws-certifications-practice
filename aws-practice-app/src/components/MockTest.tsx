@@ -40,6 +40,38 @@ const MockTest: React.FC<MockTestProps> = ({ questions }) => {
   const [questionCount, setQuestionCount] = useState(65);
   const [shuffledChoicesMap, setShuffledChoicesMap] = useState<Record<number, ShuffledChoice[]>>({});
 
+  // Handle page refresh warning during active test
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isTestStarted && !isTestCompleted) {
+        e.preventDefault();
+        e.returnValue = 'You are currently taking a mock test. Leaving this page will lose all your progress. Are you sure?';
+        return e.returnValue;
+      }
+    };
+
+    if (isTestStarted && !isTestCompleted) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isTestStarted, isTestCompleted]);
+
+  // Clear any mock test data from localStorage on component mount
+  useEffect(() => {
+    // Clean up any previous mock test data
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('mockTest')) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+  }, []);
+
   // Function to render text with images or placeholders
   const renderTextWithImages = (text: string, images: string[] = []) => {
     const parts = text.split('//IMG//');
@@ -120,6 +152,8 @@ const MockTest: React.FC<MockTestProps> = ({ questions }) => {
     setIsTestStarted(false);
     setIsTestCompleted(false);
     setShowResults(false);
+    // Clear mock test active flag when initializing new test
+    localStorage.removeItem('mockTestActive');
   };
 
   useEffect(() => {
@@ -150,6 +184,8 @@ const MockTest: React.FC<MockTestProps> = ({ questions }) => {
 
   const startTest = () => {
     setIsTestStarted(true);
+    // Save that mock test is active
+    localStorage.setItem('mockTestActive', 'true');
   };
 
   const handleAnswer = (selectedAnswers: string[]) => {
@@ -191,6 +227,8 @@ const MockTest: React.FC<MockTestProps> = ({ questions }) => {
   const completeTest = () => {
     setIsTestCompleted(true);
     setIsTestStarted(false);
+    // Clear mock test active flag
+    localStorage.removeItem('mockTestActive');
   };
 
   const calculateScore = () => {

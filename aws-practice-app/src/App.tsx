@@ -15,13 +15,75 @@ function App() {
   const [selectedTest, setSelectedTest] = useState<TestMetadata | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Detect hard refresh and handle localStorage
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Check if user is in mock test mode
+      const currentTab = localStorage.getItem('activeTab');
+      const mockTestActive = localStorage.getItem('mockTestActive');
+      
+      if (currentTab === 'mock' && mockTestActive === 'true') {
+        e.preventDefault();
+        e.returnValue = 'You are currently taking a mock test. Refreshing will lose your progress. Are you sure you want to continue?';
+        return e.returnValue;
+      }
+    };
+
+    // Detect hard refresh and clean localStorage
+    const detectHardRefresh = () => {
+      // Check if this is a hard refresh by looking at sessionStorage
+      const isHardRefresh = !sessionStorage.getItem('normalNavigation');
+      
+      if (isHardRefresh) {
+        // Clear localStorage on hard refresh
+        localStorage.removeItem('selectedTestId');
+        localStorage.removeItem('activeTab');
+        localStorage.removeItem('mockTestActive');
+        
+        // Clear any other app-specific data
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && (key.startsWith('mockTest') || key.startsWith('practiceMode') || key.startsWith('randomPractice'))) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+      }
+      
+      // Set flag for normal navigation
+      sessionStorage.setItem('normalNavigation', 'true');
+    };
+
+    // Check for hard refresh on component mount
+    detectHardRefresh();
+
+    // Add beforeunload listener
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  // Load saved state from localStorage
   useEffect(() => {
     const config = testsConfig as TestsConfig;
     setAvailableTests(config.tests);
     
-    // Auto-select first test if available
-    if (config.tests.length > 0) {
-      setSelectedTest(config.tests[0]);
+    // Try to restore saved test and tab from localStorage (only if not hard refresh)
+    const savedTestId = localStorage.getItem('selectedTestId');
+    const savedTab = localStorage.getItem('activeTab') as TabType;
+    
+    if (savedTestId && config.tests.length > 0) {
+      const savedTest = config.tests.find(test => test.id === savedTestId);
+      if (savedTest) {
+        setSelectedTest(savedTest);
+      }
+    }
+    
+    if (savedTab && ['random', 'mock', 'practice'].includes(savedTab)) {
+      setActiveTab(savedTab);
     }
     
     setIsLoading(false);
@@ -60,11 +122,23 @@ function App() {
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
+    // Save tab to localStorage
+    localStorage.setItem('activeTab', tab);
   };
 
   const handleTestSelect = (test: TestMetadata) => {
     setSelectedTest(test);
     setActiveTab('random'); // Reset to first tab when changing tests
+    // Save test selection to localStorage
+    localStorage.setItem('selectedTestId', test.id);
+    localStorage.setItem('activeTab', 'random');
+  };
+
+  const handleChangeTest = () => {
+    setSelectedTest(null);
+    // Clear saved test from localStorage
+    localStorage.removeItem('selectedTestId');
+    localStorage.removeItem('activeTab');
   };
 
   if (isLoading) {
@@ -80,8 +154,12 @@ function App() {
       <div className="App">
         <div className="container">
           <div className="app-header">
-            <h1>AWS Practice Tests</h1>
-            <p>Professional certification practice platform</p>
+            <div className="header-content">
+              <div className="header-text">
+                <h1>AWS Practice Tests</h1>
+                <p>Professional certification practice platform</p>
+              </div>
+            </div>
           </div>
           
           <TestSelector 
@@ -118,7 +196,7 @@ function App() {
             </div>
             <button 
               className="change-test-btn"
-              onClick={() => setSelectedTest(null)}
+              onClick={handleChangeTest}
             >
               Change Test
             </button>
