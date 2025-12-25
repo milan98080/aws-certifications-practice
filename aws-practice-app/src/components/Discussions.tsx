@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Discussion, DiscussionComment } from '../types';
 import './Discussions.css';
@@ -37,9 +37,24 @@ const DiscussionThread: React.FC<{ comment: DiscussionComment; depth?: number }>
 };
 
 const Discussions: React.FC<DiscussionsProps> = ({ discussions, discussionCount, questionText, questionNumber, onClose }) => {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
+
   if (!discussions || discussions.length === 0) {
     return (
-      <div className="discussions-panel">
+      <div className="discussions-panel" ref={panelRef}>
         <div className="discussions-header">
           <h3>💬 Discussions</h3>
           <button className="close-btn" onClick={onClose}>✕</button>
@@ -58,7 +73,7 @@ const Discussions: React.FC<DiscussionsProps> = ({ discussions, discussionCount,
   }
 
   return (
-    <div className="discussions-panel">
+    <div className="discussions-panel" ref={panelRef}>
       <div className="discussions-header">
         <h3>💬 Discussions {discussionCount && `(${discussionCount})`}</h3>
         <button className="close-btn" onClick={onClose}>✕</button>

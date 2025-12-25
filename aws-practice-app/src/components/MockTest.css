@@ -456,6 +456,31 @@
   font-size: 1.3rem;
 }
 
+.result-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.discussions-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.discussions-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
 .result-indicator {
   padding: 6px 16px;
   border-radius: 20px;
@@ -534,4 +559,92 @@
   .question-count-input {
     width: 100%;
   }
+}
+
+/* Choice labels for results */
+.detailed-results .choice {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  gap: 12px;
+}
+
+.detailed-results .choice-label {
+  font-weight: 700;
+  font-size: 16px;
+  color: #667eea;
+  min-width: 24px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.detailed-results .choice-text {
+  flex: 1;
+  line-height: 1.4;
+  font-size: 15px;
+}
+
+.detailed-results .choice.correct {
+  border-color: #28a745;
+  background: #d4edda;
+  color: #155724;
+}
+
+.detailed-results .choice.incorrect {
+  border-color: #dc3545;
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.detailed-results .choice.correct-highlight {
+  border-color: #28a745;
+  background: #d4edda;
+  color: #155724;
+}
+/* Choice labels during test */
+.mock-test-active .choice {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  gap: 12px;
+}
+
+.mock-test-active .choice:hover {
+  border-color: #007bff;
+  background: #f8f9ff;
+  transform: translateY(-1px);
+}
+
+.mock-test-active .choice.selected {
+  border-color: #007bff;
+  background: #e3f2fd;
+}
+
+.mock-test-active .choice-label {
+  font-weight: 700;
+  font-size: 16px;
+  color: #667eea;
+  min-width: 24px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.mock-test-active .choice-text {
+  flex: 1;
+  line-height: 1.4;
+  font-size: 15px;
+}
+.result-indicator.skipped {
+  background: #fff3cd;
+  color: #856404;
 }

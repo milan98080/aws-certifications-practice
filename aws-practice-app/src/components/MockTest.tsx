@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
+import Discussions from './Discussions';
 import './MockTest.css';
 
 interface MockTestProps {
@@ -34,12 +35,39 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
   const [testQuestions, setTestQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [testAnswers, setTestAnswers] = useState<TestAnswer[]>([]);
-  const [timeLeft, setTimeLeft] = useState(60 * 60); // 60 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(0); // Will be calculated based on question count
   const [isTestStarted, setIsTestStarted] = useState(false);
   const [isTestCompleted, setIsTestCompleted] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [questionCount, setQuestionCount] = useState(65);
+  const [questionCountInput, setQuestionCountInput] = useState('65');
   const [shuffledChoicesMap, setShuffledChoicesMap] = useState<Record<number, ShuffledChoice[]>>({});
+  const [showDiscussions, setShowDiscussions] = useState<number | null>(null);
+
+  // Format time limit for display
+  const formatTimeLimit = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    
+    if (remainingSeconds === 0) {
+      return `${minutes} minutes`;
+    } else {
+      return `${minutes} minutes ${remainingSeconds} seconds`;
+    }
+  };
+
+  // Calculate time based on question count (2 hours for 65 questions)
+  const calculateTimeLimit = (numQuestions: number) => {
+    const baseTimeMinutes = 120; // 2 hours for 65 questions
+    const timePerQuestion = baseTimeMinutes / 65;
+    const totalMinutes = timePerQuestion * numQuestions;
+    
+    // Convert to seconds and round up to nearest 15 seconds
+    const totalSeconds = Math.ceil(totalMinutes * 60);
+    const roundedSeconds = Math.ceil(totalSeconds / 15) * 15;
+    
+    return roundedSeconds;
+  };
 
   // Handle page refresh warning during active test
   useEffect(() => {
@@ -149,7 +177,8 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
     
     setCurrentQuestionIndex(0);
     setTestAnswers([]);
-    setTimeLeft(60 * 60);
+    const calculatedTime = calculateTimeLimit(questionCount);
+    setTimeLeft(calculatedTime);
     setIsTestStarted(false);
     setIsTestCompleted(false);
     setShowResults(false);
@@ -169,7 +198,7 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
       timer = setTimeout(() => {
         setTimeLeft(prev => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0 && !isTestCompleted) {
+    } else if (timeLeft === 0 && isTestStarted && !isTestCompleted) {
       completeTest();
     }
 
@@ -214,9 +243,8 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
   const nextQuestion = () => {
     if (currentQuestionIndex < testQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      completeTest();
     }
+    // Remove the else clause - no auto-complete on last question
   };
 
   const previousQuestion = () => {
@@ -260,15 +288,26 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
               <input
                 type="number"
                 min="1"
-                max={questions.length}
-                value={questionCount}
-                onChange={(e) => setQuestionCount(Math.min(Math.max(1, parseInt(e.target.value) || 65), questions.length))}
+                max="65"
+                value={questionCountInput}
+                onChange={(e) => setQuestionCountInput(e.target.value)}
+                onBlur={(e) => {
+                  const value = e.target.value;
+                  if (value === '' || isNaN(parseInt(value))) {
+                    setQuestionCount(1);
+                    setQuestionCountInput('1');
+                  } else {
+                    const num = Math.min(Math.max(1, parseInt(value)), 65);
+                    setQuestionCount(num);
+                    setQuestionCountInput(num.toString());
+                  }
+                }}
                 className="question-count-input"
               />
             </div>
             <div className="detail-item">
               <span className="detail-label">Time Limit:</span>
-              <span className="detail-value">60 minutes</span>
+              <span className="detail-value">{formatTimeLimit(calculateTimeLimit(questionCount))}</span>
             </div>
             <div className="detail-item">
               <span className="detail-label">Question Order:</span>
@@ -278,12 +317,13 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
           <div className="test-instructions">
             <h3>Instructions:</h3>
             <ul>
-              <li>You have 60 minutes to complete {questionCount} questions</li>
+              <li>You have {formatTimeLimit(calculateTimeLimit(questionCount))} to complete {questionCount} questions</li>
               <li>Questions are presented in random order</li>
               <li>You can navigate between questions using Previous/Next buttons</li>
               <li>No feedback will be shown during the test</li>
               <li>Timer will start when you click "Start Test"</li>
               <li>Test will auto-submit when time expires</li>
+              <li>You must reach the last question to submit the test</li>
               <li>Detailed results will be shown after completion</li>
             </ul>
           </div>
@@ -345,12 +385,17 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
         </div>
         
         <div className="results-list">
-          {testAnswers.map((answer, index) => {
-            if (!answer) return null;
-            
-            const correctAnswers = answer.question.correct_answer.split('');
+          {testQuestions.map((question, index) => {
+            const answer = testAnswers[index];
+            const correctAnswers = question.correct_answer.split('');
             
             const getChoiceClass = (choice: string) => {
+              if (!answer) {
+                // For skipped questions, only highlight correct answers
+                const isCorrectChoice = correctAnswers.includes(choice);
+                return isCorrectChoice ? 'choice correct-highlight' : 'choice';
+              }
+              
               const isSelected = answer.selectedAnswers.includes(choice);
               const isCorrectChoice = correctAnswers.includes(choice);
 
@@ -364,20 +409,31 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
               <div key={index} className="result-question">
                 <div className="result-header">
                   <h3>Question {index + 1}</h3>
-                  <span className={`result-indicator ${answer.isCorrect ? 'correct' : 'incorrect'}`}>
-                    {answer.isCorrect ? '✓ Correct' : '✗ Incorrect'}
-                  </span>
+                  <div className="result-actions">
+                    <span className={`result-indicator ${answer ? (answer.isCorrect ? 'correct' : 'incorrect') : 'skipped'}`}>
+                      {answer ? (answer.isCorrect ? '✓ Correct' : '✗ Incorrect') : '⊘ Skipped'}
+                    </span>
+                    {question.discussion && question.discussion.length > 0 && (
+                      <button 
+                        className="discussions-btn"
+                        onClick={() => setShowDiscussions(index)}
+                      >
+                        💬 Discussions {question.discussion_count && `(${question.discussion_count})`}
+                      </button>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="question-text">
-                  {renderTextWithImages(answer.question.question_text, answer.question.question_images || [])}
+                  {renderTextWithImages(question.question_text, question.question_images || [])}
                 </div>
 
                 <div className="choices">
-                  {answer.shuffledChoices.map(({ key, value }) => (
+                  {shuffledChoicesMap[index]?.map(({ key, value }) => (
                     <div key={key} className={getChoiceClass(key)}>
+                      <span className="choice-label">{key}</span>
                       <span className="choice-text">
-                        {renderTextWithImages(value, answer.question.answer_images || [])}
+                        {renderTextWithImages(value, question.answer_images || [])}
                       </span>
                     </div>
                   ))}
@@ -386,6 +442,16 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
             );
           })}
         </div>
+
+        {showDiscussions !== null && (
+          <Discussions
+            discussions={testQuestions[showDiscussions]?.discussion}
+            discussionCount={testQuestions[showDiscussions]?.discussion_count}
+            questionText={testQuestions[showDiscussions]?.question_text}
+            questionNumber={testQuestions[showDiscussions]?.question_number}
+            onClose={() => setShowDiscussions(null)}
+          />
+        )}
       </div>
     );
   }
@@ -424,15 +490,18 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName }) => {
           ← Previous
         </button>
         
-        <button className="complete-btn" onClick={completeTest}>
-          Complete Test
-        </button>
+        {currentQuestionIndex === testQuestions.length - 1 && (
+          <button className="complete-btn" onClick={completeTest}>
+            Submit Test
+          </button>
+        )}
         
         <button 
           className="nav-btn next-btn" 
           onClick={nextQuestion}
+          disabled={currentQuestionIndex === testQuestions.length - 1}
         >
-          {currentQuestionIndex === testQuestions.length - 1 ? 'Finish' : 'Next →'}
+          Next →
         </button>
       </div>
     </div>
@@ -543,6 +612,7 @@ const MockQuestionCard: React.FC<MockQuestionCardProps> = ({
               className={`choice ${selectedAnswers.includes(key) ? 'selected' : ''}`}
               onClick={() => handleAnswerClick(key)}
             >
+              <span className="choice-label">{key}</span>
               <span className="choice-text">
                 {renderTextWithImages(value, question.answer_images || [])}
               </span>
