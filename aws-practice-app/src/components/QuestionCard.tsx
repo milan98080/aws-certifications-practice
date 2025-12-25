@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
+import Discussions from './Discussions';
 import './QuestionCard.css';
 
 interface QuestionCardProps {
@@ -28,6 +29,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onNext, showNextB
   const [showResult, setShowResult] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [shuffledChoices, setShuffledChoices] = useState<ShuffledChoice[]>([]);
+  const [showDiscussions, setShowDiscussions] = useState(false);
 
   const correctAnswers = question.correct_answer.split('');
   const isMultipleAnswer = correctAnswers.length > 1;
@@ -89,6 +91,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onNext, showNextB
     setSelectedAnswers([]);
     setShowResult(false);
     setIsSubmitted(false);
+    setShowDiscussions(false);
     
     if (hasValidChoices) {
       // Convert choices object to array and shuffle
@@ -204,6 +207,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onNext, showNextB
               <div className={`result ${isCorrect() ? 'correct' : 'incorrect'}`}>
                 {isCorrect() ? '✓ Correct!' : '✗ Incorrect'}
               </div>
+              {question.discussion && question.discussion.length > 0 && (
+                <button 
+                  className="discussions-btn"
+                  onClick={() => setShowDiscussions(true)}
+                >
+                  💬 Discussions {question.discussion_count && `(${question.discussion_count})`}
+                </button>
+              )}
               {showNextButton && (
                 <button className="next-btn-header" onClick={handleNext}>
                   Next Question
@@ -236,6 +247,16 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onNext, showNextB
         <button className="submit-btn" onClick={handleSubmit}>
           Submit Answer
         </button>
+      )}
+
+      {showDiscussions && (
+        <Discussions
+          discussions={question.discussion}
+          discussionCount={question.discussion_count}
+          questionText={question.question_text}
+          questionNumber={question.question_number}
+          onClose={() => setShowDiscussions(false)}
+        />
       )}
     </div>
   );

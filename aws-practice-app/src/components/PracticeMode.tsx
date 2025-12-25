@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
+import Discussions from './Discussions';
 import './PracticeMode.css';
 
 interface PracticeModeProps {
@@ -28,6 +29,7 @@ const PracticeMode: React.FC<PracticeModeProps> = ({ questions, testName }) => {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string[]>>({});
   const [shuffledChoices, setShuffledChoices] = useState<Record<number, ShuffledChoice[]>>({});
   const [pageInput, setPageInput] = useState('');
+  const [showDiscussions, setShowDiscussions] = useState<number | null>(null);
   
   const questionsPerPage = 10;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -283,14 +285,26 @@ const PracticeMode: React.FC<PracticeModeProps> = ({ questions, testName }) => {
             <div key={question.question_id} className="practice-question">
               <div className="question-header">
                 <h3>Question {question.question_number}</h3>
-                {isMultipleAnswer && (
-                  <span className="multiple-indicator">Multiple Answers</span>
-                )}
-                {isAnswered && (
-                  <span className={`result-indicator ${isCorrect(questionIndex) ? 'correct' : 'incorrect'}`}>
-                    {isCorrect(questionIndex) ? '✓ Correct' : '✗ Incorrect'}
-                  </span>
-                )}
+                <div className="question-header-actions">
+                  {isMultipleAnswer && (
+                    <span className="multiple-indicator">Multiple Answers</span>
+                  )}
+                  {isAnswered && (
+                    <>
+                      <span className={`result-indicator ${isCorrect(questionIndex) ? 'correct' : 'incorrect'}`}>
+                        {isCorrect(questionIndex) ? '✓ Correct' : '✗ Incorrect'}
+                      </span>
+                      {question.discussion && question.discussion.length > 0 && (
+                        <button 
+                          className="discussions-btn"
+                          onClick={() => setShowDiscussions(questionIndex)}
+                        >
+                          💬 Discussions {question.discussion_count && `(${question.discussion_count})`}
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
               
               <div className="question-text">
@@ -363,6 +377,16 @@ const PracticeMode: React.FC<PracticeModeProps> = ({ questions, testName }) => {
           Next →
         </button>
       </div>
+
+      {showDiscussions !== null && (
+        <Discussions
+          discussions={questions[showDiscussions]?.discussion}
+          discussionCount={questions[showDiscussions]?.discussion_count}
+          questionText={questions[showDiscussions]?.question_text}
+          questionNumber={questions[showDiscussions]?.question_number}
+          onClose={() => setShowDiscussions(null)}
+        />
+      )}
     </div>
   );
 };

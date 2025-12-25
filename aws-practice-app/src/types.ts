@@ -1,3 +1,21 @@
+export interface DiscussionComment {
+  content: string;
+  poster: string;
+  comment_id?: string;
+  upvote_count?: string;
+  timestamp?: string;
+  comments?: DiscussionComment[];
+}
+
+export interface Discussion {
+  upvote_count?: string;
+  poster: string;
+  content?: string;
+  timestamp?: string;
+  comment_id?: string;
+  comments?: DiscussionComment[];
+}
+
 export interface Question {
   question_id: string;
   question_number: number;
@@ -7,6 +25,8 @@ export interface Question {
   is_multiple_choice: boolean;
   question_images?: string[];
   answer_images?: string[];
+  discussion?: Discussion[];
+  discussion_count?: number;
 }
 
 export interface QuizData {

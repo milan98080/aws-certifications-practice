@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkaws_practice_app=self.webpackChunkaws_practice_app||[]).push([[349],{349(c,p,a){c.exports=a.p+"static/media/README.b67985c1cd7255d29e8c.md"}}]);
