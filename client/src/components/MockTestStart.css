@@ -1,0 +1,132 @@
+/* MockTest Start Screen - Isolated CSS */
+.mocktest-start-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mocktest-start-card {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mocktest-start-title {
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.mocktest-details-section {
+  text-align: left;
+  margin-bottom: 30px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 20px;
+  background: #fafafa;
+}
+
+.mocktest-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.mocktest-detail-row:last-child {
+  border-bottom: none;
+}
+
+.mocktest-detail-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.mocktest-detail-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.mocktest-question-input {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  text-align: center;
+  width: 60px;
+  background: white;
+}
+
+.mocktest-question-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.mocktest-instructions-section {
+  text-align: left;
+  margin-bottom: 30px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+.mocktest-instructions-title {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.mocktest-instructions-list {
+  color: #555;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.mocktest-instructions-item {
+  margin-bottom: 6px;
+}
+
+.mocktest-start-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.mocktest-start-button:hover {
+  background: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mocktest-start-container {
+    padding: 15px;
+  }
+  
+  .mocktest-start-card {
+    padding: 30px 20px;
+  }
+  
+  .mocktest-question-input {
+    width: 80px;
+  }
+}

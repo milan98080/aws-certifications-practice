@@ -1,0 +1,55 @@
+# Development overrides for docker-compose.yml
+# This file is automatically loaded by docker-compose and provides development-specific configurations
+
+version: '3.8'
+
+services:
+  server:
+    # Development-specific environment variables
+    environment:
+      - NODE_ENV=development
+      - DEBUG=app:*
+      - NODEMON_LEGACY_WATCH=true
+    # Enable hot reloading for better development experience
+    volumes:
+      - ./server:/app:cached
+      - /app/node_modules
+      - server_dev_logs:/app/logs
+    # Override command to use nodemon for auto-restart
+    command: >
+      sh -c "
+        if [ ! -f package.json ]; then
+          echo 'package.json not found, copying from build context...'
+          exit 1
+        fi
+        npm run dev
+      "
+
+  client:
+    # Development-specific environment variables for React
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000/api
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      - GENERATE_SOURCEMAP=true
+      - BROWSER=none
+    # Enable hot reloading with cached volumes for better performance
+    volumes:
+      - ./client:/app:cached
+      - /app/node_modules
+      - /app/build
+      - client_dev_logs:/app/logs
+    # Override command to ensure development server starts properly
+    command: >
+      sh -c "
+        if [ ! -f package.json ]; then
+          echo 'package.json not found, copying from build context...'
+          exit 1
+        fi
+        npm start
+      "
+
+volumes:
+  server_dev_logs:
+  client_dev_logs:

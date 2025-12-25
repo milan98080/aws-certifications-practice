@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: aws-practice-db
+    environment:
+      POSTGRES_DB: aws_practice
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/database/init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Node.js Backend Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: aws-practice-server
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:password@database:5432/aws_practice
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      JWT_EXPIRES_IN: 24h
+      CORS_ORIGIN: http://localhost:3000
+      CHOKIDAR_USEPOLLING: true
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - server_logs:/app/logs
+    depends_on:
+      - database
+    networks:
+      - app-network
+    command: npm run dev
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # React Frontend Client
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: aws-practice-client
+    environment:
+      REACT_APP_API_URL: http://localhost:5000/api
+      CHOKIDAR_USEPOLLING: true
+      WATCHPACK_POLLING: true
+      FAST_REFRESH: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+      - /app/build
+      - client_logs:/app/logs
+    depends_on:
+      - server
+    networks:
+      - app-network
+    command: npm start
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+  server_logs:
+  client_logs:
+
+networks:
+  app-network:
+    driver: bridge
