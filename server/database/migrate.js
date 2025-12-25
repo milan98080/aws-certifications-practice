@@ -1,10 +1,14 @@
+require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
 
 // Database connection
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/aws_practice'
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/aws_practice',
+  ssl: process.env.NODE_ENV === 'production' ? {
+    rejectUnauthorized: false // For AWS RDS with self-signed certificates
+  } : false
 });
 
 // Path to the original test data
