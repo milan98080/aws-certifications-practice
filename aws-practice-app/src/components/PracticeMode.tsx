@@ -318,6 +318,7 @@ const PracticeMode: React.FC<PracticeModeProps> = ({ questions, testName }) => {
                     className={getChoiceClass(questionIndex, key)}
                     onClick={() => !isAnswered && handleAnswerClick(questionIndex, key)}
                   >
+                    <span className="choice-label">{key}</span>
                     <span className="choice-text">
                       {renderTextWithImages(value, question.answer_images || [])}
                     </span>

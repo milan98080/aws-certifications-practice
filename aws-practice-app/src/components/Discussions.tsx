@@ -46,7 +46,7 @@ const Discussions: React.FC<DiscussionsProps> = ({ discussions, discussionCount,
         </div>
         {questionText && (
           <div className="question-preview">
-            <div className="question-preview-label">Question {questionNumber}</div>
+            <div className="question-preview-label">Question</div>
             <div className="question-preview-text">{questionText}</div>
           </div>
         )}
@@ -65,7 +65,7 @@ const Discussions: React.FC<DiscussionsProps> = ({ discussions, discussionCount,
       </div>
       {questionText && (
         <div className="question-preview">
-          <div className="question-preview-label">Question {questionNumber}</div>
+          <div className="question-preview-label">Question</div>
           <div className="question-preview-text">{questionText}</div>
         </div>
       )}

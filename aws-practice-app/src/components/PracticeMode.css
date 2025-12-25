@@ -184,6 +184,16 @@
   cursor: pointer;
   transition: all 0.3s ease;
   background: white;
+  gap: 12px;
+}
+
+.choice-label {
+  font-weight: 700;
+  font-size: 16px;
+  color: #667eea;
+  min-width: 24px;
+  flex-shrink: 0;
+  padding-top: 2px;
 }
 
 .choice:hover:not(.correct):not(.incorrect):not(.correct-highlight) {

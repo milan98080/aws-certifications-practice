@@ -236,6 +236,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onNext, showNextB
             className={getChoiceClass(key)}
             onClick={() => handleAnswerClick(key)}
           >
+            <span className="choice-label">{key}</span>
             <span className="choice-text">
               {renderTextWithImages(value, question.answer_images || [])}
             </span>
