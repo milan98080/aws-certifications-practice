@@ -13,6 +13,27 @@ const pool = new Pool({
 
 // Path to the original test data
 const ORIGINAL_DATA_PATH = path.join(__dirname, '../test-data');
+const SCHEMA_PATH = path.join(__dirname, 'init/01-schema.sql');
+
+async function createSchema() {
+  const client = await pool.connect();
+  
+  try {
+    console.log('Creating database schema...');
+    
+    // Read and execute schema file
+    const schemaSQL = fs.readFileSync(SCHEMA_PATH, 'utf8');
+    await client.query(schemaSQL);
+    
+    console.log('Database schema created successfully!');
+    
+  } catch (error) {
+    console.error('Schema creation failed:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
 
 async function migrateTestData() {
   const client = await pool.connect();
@@ -22,6 +43,11 @@ async function migrateTestData() {
     
     // Read tests configuration
     const testsConfigPath = path.join(ORIGINAL_DATA_PATH, 'tests.json');
+    
+    if (!fs.existsSync(testsConfigPath)) {
+      throw new Error(`Tests configuration file not found: ${testsConfigPath}`);
+    }
+    
     const testsConfig = JSON.parse(fs.readFileSync(testsConfigPath, 'utf8'));
     
     console.log(`Found ${testsConfig.tests.length} tests to migrate`);
@@ -156,6 +182,31 @@ async function migrateTestData() {
   }
 }
 
+async function fullMigration() {
+  try {
+    console.log('Starting full database migration...');
+    console.log('Environment:', process.env.NODE_ENV || 'development');
+    console.log('Database URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
+    
+    // Test database connection
+    const client = await pool.connect();
+    console.log('Database connection successful!');
+    client.release();
+    
+    // Create schema first
+    await createSchema();
+    
+    // Then migrate data
+    await migrateTestData();
+    
+    console.log('Full migration completed successfully!');
+    
+  } catch (error) {
+    console.error('Full migration failed:', error);
+    throw error;
+  }
+}
+
 async function rollbackMigration() {
   const client = await pool.connect();
   
@@ -193,13 +244,15 @@ if (require.main === module) {
       .then(() => process.exit(0))
       .catch(() => process.exit(1));
   } else {
-    migrateTestData()
+    fullMigration()
       .then(() => process.exit(0))
       .catch(() => process.exit(1));
   }
 }
 
 module.exports = {
+  createSchema,
   migrateTestData,
+  fullMigration,
   rollbackMigration
 };
