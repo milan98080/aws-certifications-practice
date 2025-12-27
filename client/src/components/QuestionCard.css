@@ -1,11 +1,13 @@
 .question-card {
   width: 100%;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   padding: 28px;
   background: white;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
 .question-error {
@@ -220,7 +222,7 @@
 
 .choice {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 18px;
   margin-bottom: 12px;
   border: 2px solid #e5e7eb;
@@ -314,6 +316,8 @@
   line-height: 1.5;
   font-size: 15px;
   color: #374151;
+  display: flex;
+  align-items: center;
 }
 
 .submit-btn {
@@ -342,8 +346,8 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .question-card {
-    margin: 10px;
-    padding: 15px;
+    margin: 0;
+    padding: 20px;
   }
   
   .question-header {
@@ -356,10 +360,29 @@
   }
   
   .choice {
-    padding: 12px;
+    padding: 15px;
   }
   
   .choice-text {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .question-card {
+    margin: 0;
+    padding: 15px;
+  }
+  
+  .question-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .choice {
+    padding: 12px;
+  }
+  
+  .choice-text {
+    font-size: 13px;
   }
 }

@@ -50,6 +50,7 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName, testId }) => {
   const [showDiscussions, setShowDiscussions] = useState<number | null>(null);
   const [testStartTime, setTestStartTime] = useState<number>(0);
   const [isSavingResults, setIsSavingResults] = useState(false);
+  const [maxQuestionReached, setMaxQuestionReached] = useState(0); // Track highest question index reached
 
   // Format time limit for display
   const formatTimeLimit = (seconds: number) => {
@@ -183,6 +184,7 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName, testId }) => {
     setShuffledChoicesMap(choicesMap);
     
     setCurrentQuestionIndex(0);
+    setMaxQuestionReached(0); // Reset max question reached to first question
     setTestAnswers([]);
     const calculatedTime = calculateTimeLimit(questionCount);
     setTimeLeft(calculatedTime);
@@ -300,13 +302,17 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName, testId }) => {
     }
     
     if (currentQuestionIndex < testQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      const nextIndex = currentQuestionIndex + 1;
+      setCurrentQuestionIndex(nextIndex);
+      // Update max question reached when moving forward
+      setMaxQuestionReached(prev => Math.max(prev, nextIndex));
     }
     // Remove the else clause - no auto-complete on last question
   };
 
   const goToQuestion = (questionIndex: number) => {
-    if (questionIndex >= 0 && questionIndex < testQuestions.length) {
+    // Only allow navigation to questions that have been reached before
+    if (questionIndex >= 0 && questionIndex <= maxQuestionReached && questionIndex < testQuestions.length) {
       setCurrentQuestionIndex(questionIndex);
     }
   };
@@ -579,11 +585,61 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName, testId }) => {
                     <span className="stat-value">{progress.answered}</span>
                     <span className="stat-label">Answered</span>
                   </div>
-                  <div className="stat-item" title={progress.skippedQuestions.length > 0 ? `Skipped Questions: ${progress.skippedQuestions.join(', ')}` : 'No skipped questions'}>
+                  <div 
+                    className="stat-item" 
+                    title={progress.skippedQuestions.length > 0 ? `Skipped Questions: ${progress.skippedQuestions.join(', ')}` : 'No skipped questions'}
+                    data-mobile-info={progress.skippedQuestions.length > 0 ? `Q: ${progress.skippedQuestions.join(', ')}` : 'None'}
+                    onClick={(e) => {
+                      if (window.innerWidth <= 768 && e.currentTarget) {
+                        const element = e.currentTarget;
+                        element.classList.toggle('show-tooltip');
+                        
+                        // Hide on scroll
+                        const hideTooltip = () => {
+                          element.classList.remove('show-tooltip');
+                          window.removeEventListener('scroll', hideTooltip);
+                        };
+                        
+                        // Auto-hide after 2 seconds
+                        const timeoutId = setTimeout(() => {
+                          element.classList.remove('show-tooltip');
+                          window.removeEventListener('scroll', hideTooltip);
+                        }, 2000);
+                        
+                        // Hide immediately on scroll
+                        window.addEventListener('scroll', hideTooltip, { once: true });
+                      }
+                    }}
+                  >
                     <span className="stat-value">{progress.skipped}</span>
                     <span className="stat-label">Skipped</span>
                   </div>
-                  <div className="stat-item flagged-stat" title={progress.flaggedQuestions.length > 0 ? `Flagged Questions: ${progress.flaggedQuestions.join(', ')}` : 'No flagged questions'}>
+                  <div 
+                    className="stat-item flagged-stat" 
+                    title={progress.flaggedQuestions.length > 0 ? `Flagged Questions: ${progress.flaggedQuestions.join(', ')}` : 'No flagged questions'}
+                    data-mobile-info={progress.flaggedQuestions.length > 0 ? `Q: ${progress.flaggedQuestions.join(', ')}` : 'None'}
+                    onClick={(e) => {
+                      if (window.innerWidth <= 768 && e.currentTarget) {
+                        const element = e.currentTarget;
+                        element.classList.toggle('show-tooltip');
+                        
+                        // Hide on scroll
+                        const hideTooltip = () => {
+                          element.classList.remove('show-tooltip');
+                          window.removeEventListener('scroll', hideTooltip);
+                        };
+                        
+                        // Auto-hide after 2 seconds
+                        const timeoutId = setTimeout(() => {
+                          element.classList.remove('show-tooltip');
+                          window.removeEventListener('scroll', hideTooltip);
+                        }, 2000);
+                        
+                        // Hide immediately on scroll
+                        window.addEventListener('scroll', hideTooltip, { once: true });
+                      }
+                    }}
+                  >
                     <span className="stat-value">{progress.flagged}</span>
                     <span className="stat-label">Flagged</span>
                   </div>
@@ -600,7 +656,9 @@ const MockTest: React.FC<MockTestProps> = ({ questions, testName, testId }) => {
               value={currentQuestionIndex}
               onChange={(e) => goToQuestion(parseInt(e.target.value))}
             >
-              {testQuestions.map((_, index) => (
+              {testQuestions
+                .slice(0, maxQuestionReached + 1) // Only show questions up to maxQuestionReached
+                .map((_, index) => (
                 <option key={index} value={index}>
                   Question {index + 1}
                   {testAnswers[index]?.selectedAnswers.length > 0 ? ' ✓' : ''}

@@ -5,6 +5,25 @@
   box-sizing: border-box;
 }
 
+/* Hide scrollbars globally while maintaining scroll functionality */
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+html, body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -40,6 +59,14 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
+  width: 100%;
+}
+
+.header-text {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .header-text h1 {
@@ -47,6 +74,17 @@ body {
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 4px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+}
+
+.mobile-title {
+  display: none;
+}
+
+.full-title {
+  display: inline;
 }
 
 .header-text p {
@@ -164,14 +202,51 @@ body {
   .header-content {
     flex-direction: column;
     align-items: stretch;
+    gap: 15px;
+  }
+  
+  .header-text {
+    text-align: center;
+  }
+  
+  .header-text h1 {
+    font-size: 1.3rem;
+    line-height: 1.4;
   }
   
   .header-actions {
     justify-content: center;
+    flex-wrap: wrap;
   }
   
   .test-info-bar {
     flex-direction: column;
     gap: 10px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+  
+  .header-text h1 {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  
+  .header-text p {
+    font-size: 0.85rem;
+  }
+  
+  .header-actions {
+    gap: 10px;
+  }
+  
+  .change-test-btn, .logout-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
   }
 }

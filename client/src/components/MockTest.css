@@ -166,9 +166,11 @@
 }
 
 .mock-test-active {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .test-header {
@@ -208,6 +210,7 @@
   border-radius: 4px;
   border: 1px solid #e5e7eb;
   font-size: 12px;
+  position: relative;
 }
 
 .stat-value {
@@ -220,18 +223,50 @@
   font-size: 11px;
 }
 
-.flagged-stat {
+.stat-item.flagged-stat,
+.stat-item[title*="Skipped"] {
   cursor: help;
 }
 
-.stat-item[title*="Skipped"] {
-  cursor: help;
+/* Mobile-friendly tooltip alternative */
+@media (max-width: 768px) {
+  .stat-item.flagged-stat::after,
+  .stat-item[title*="Skipped"]::after {
+    content: attr(data-mobile-info);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 1000;
+    margin-bottom: 4px;
+  }
+  
+  .stat-item.flagged-stat:active::after,
+  .stat-item[title*="Skipped"]:active::after {
+    opacity: 1;
+  }
+  
+  /* Show on tap/touch */
+  .stat-item.flagged-stat.show-tooltip::after,
+  .stat-item[title*="Skipped"].show-tooltip::after {
+    opacity: 1;
+  }
 }
 
 .test-progress {
   flex: 1;
   margin: 0 12px;
   max-width: 300px;
+  min-width: 200px;
 }
 
 .progress-info {
@@ -290,14 +325,16 @@
 }
 
 .test-navigation {
-  display: flex;
-  justify-content: space-between;
+  display: flex !important;
+  justify-content: space-between !important;
   align-items: center;
   background: white;
   padding: 16px 20px;
   border-radius: 8px;
   margin-top: 16px;
   border: 1px solid #e5e7eb;
+  flex-direction: row !important;
+  gap: 15px;
 }
 
 .nav-btn {
@@ -310,6 +347,8 @@
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s ease;
+  flex: 0 0 auto;
+  min-width: 100px;
 }
 
 .nav-btn:hover:not(:disabled) {
@@ -331,6 +370,8 @@
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s ease;
+  flex: 0 0 auto;
+  min-width: 100px;
 }
 
 .complete-btn:hover {
@@ -338,13 +379,15 @@
 }
 
 .mock-test-results {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 60vh;
+  box-sizing: border-box;
 }
 
 .results-card {
@@ -485,9 +528,11 @@
 }
 
 .detailed-results {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .results-header {
@@ -605,6 +650,28 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .test-header {
+    flex-wrap: wrap;
+  }
+  
+  .test-progress {
+    flex: 1 1 100%;
+    margin: 8px 0 0 0;
+    max-width: none;
+    order: 3;
+  }
+  
+  .test-info {
+    flex: 1 1 auto;
+    order: 1;
+  }
+  
+  .timer {
+    order: 2;
+  }
+}
+
 @media (max-width: 768px) {
   .test-header {
     flex-direction: column;
@@ -612,17 +679,33 @@
   }
   
   .test-progress {
-    margin-right: 0;
+    margin: 0;
     width: 100%;
+    max-width: none;
+    order: 2;
+  }
+  
+  .test-info {
+    order: 1;
+    width: 100%;
+  }
+  
+  .timer {
+    order: 3;
+    align-self: center;
   }
   
   .test-navigation {
-    flex-direction: column;
+    flex-direction: row !important;
+    justify-content: space-between !important;
     gap: 15px;
+    padding: 12px 16px;
   }
   
-  .nav-btn, .complete-btn, .skip-btn {
-    width: 100%;
+  .nav-btn, .complete-btn {
+    flex: 1;
+    max-width: 140px;
+    min-width: 80px;
   }
   
   .test-details {
@@ -663,6 +746,23 @@
   
   .question-count-input {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .test-navigation {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  
+  .nav-btn, .complete-btn {
+    flex: 1;
+    max-width: 120px;
+    min-width: 70px;
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }
 

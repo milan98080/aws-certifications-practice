@@ -174,16 +174,52 @@
   .history-stats {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 20px;
   }
   
-  .test-summary {
+  .mock-test-card {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
+    padding: 16px;
+  }
+  
+  .test-score {
+    justify-content: space-between;
+    min-width: auto;
   }
   
   .test-details {
     margin: 0;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .view-details-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .history-header h2 {
+    font-size: 1.3rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+  }
+  
+  .history-stats {
+    gap: 16px;
+  }
+  
+  .test-details {
+    font-size: 0.8rem;
+  }
+  
+  .test-score .score {
+    font-size: 1rem;
   }
 }

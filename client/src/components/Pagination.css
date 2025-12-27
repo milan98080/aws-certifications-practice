@@ -1,0 +1,181 @@
+/* Pagination Component Styles */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 16px 20px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.pagination-top {
+  margin-bottom: 20px;
+}
+
+.pagination-bottom {
+  margin-top: 20px;
+  margin-bottom: 16px;
+}
+
+.nav-btn {
+  background: #6b7280;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.page-input-form {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.page-input {
+  width: 100px;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.page-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.page-input-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.page-input-btn:hover {
+  background: #2563eb;
+}
+
+.page-btn {
+  background: transparent;
+  color: #3b82f6;
+  border: 1px solid #d1d5db;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 36px;
+}
+
+.page-btn:hover {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.page-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.ellipsis {
+  color: #6b7280;
+  padding: 0 6px;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pagination {
+    padding: 14px 16px;
+  }
+  
+  .page-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    order: -1;
+    margin-bottom: 10px;
+  }
+  
+  .page-input-form {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .page-input {
+    width: 150px;
+  }
+  
+  .nav-btn {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    padding: 12px 16px;
+  }
+  
+  .page-buttons {
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  
+  .page-btn {
+    padding: 4px 8px;
+    min-width: 32px;
+    font-size: 12px;
+  }
+  
+  .nav-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+    min-width: 90px;
+  }
+  
+  .page-input {
+    width: 120px;
+    font-size: 11px;
+  }
+  
+  .page-input-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}

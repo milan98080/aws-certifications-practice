@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
 import { progressService } from '../services/progressService';
 import Discussions from './Discussions';
+import Pagination from './Pagination';
+import { usePaginationScroll } from '../hooks/useScrollManagement';
 import './StudyMode.css';
 
 interface StudyModeProps {
@@ -47,6 +49,9 @@ const StudyMode: React.FC<StudyModeProps> = ({ questions, testName, testId }) =>
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string>('');
+  
+  // Scroll management for pagination
+  const { handlePageChange } = usePaginationScroll();
   
   const questionsPerPage = 10;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -290,8 +295,10 @@ const StudyMode: React.FC<StudyModeProps> = ({ questions, testName, testId }) =>
   };
 
   const goToPage = (page: number) => {
-    setCurrentPage(page);
-    setPageInput(''); // Clear input when navigating
+    handlePageChange(() => {
+      setCurrentPage(page);
+      setPageInput(''); // Clear input when navigating
+    });
   };
 
   const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -308,50 +315,14 @@ const StudyMode: React.FC<StudyModeProps> = ({ questions, testName, testId }) =>
     }
   };
 
-  const getPaginationButtons = () => {
-    const buttons = [];
-    const maxVisible = 5;
-    
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-    
-    if (endPage - startPage + 1 < maxVisible) {
-      startPage = Math.max(1, endPage - maxVisible + 1);
-    }
-
-    if (startPage > 1) {
-      buttons.push(
-        <button key={1} className="page-btn" onClick={() => goToPage(1)}>1</button>
-      );
-      if (startPage > 2) {
-        buttons.push(<span key="start-ellipsis" className="ellipsis">...</span>);
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(
-        <button
-          key={i}
-          className={`page-btn ${currentPage === i ? 'active' : ''}`}
-          onClick={() => goToPage(i)}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        buttons.push(<span key="end-ellipsis" className="ellipsis">...</span>);
-      }
-      buttons.push(
-        <button key={totalPages} className="page-btn" onClick={() => goToPage(totalPages)}>
-          {totalPages}
-        </button>
-      );
-    }
-
-    return buttons;
+  // Pagination component props
+  const paginationProps = {
+    currentPage,
+    totalPages,
+    onPageChange: goToPage,
+    pageInput,
+    onPageInputChange: (value: string) => setPageInput(value),
+    onPageInputSubmit: handlePageInputSubmit
   };
 
   const getStudyStats = () => {
@@ -373,7 +344,7 @@ const StudyMode: React.FC<StudyModeProps> = ({ questions, testName, testId }) =>
   const stats = getStudyStats();
 
   return (
-    <div className="study-mode">
+    <div className="study-mode" id="study-mode-container">
       <div className="study-header">
         <h2>🎯 {testName} - Study Mode</h2>
         <div className="study-progress-bar">
@@ -400,7 +371,10 @@ const StudyMode: React.FC<StudyModeProps> = ({ questions, testName, testId }) =>
         </div>
       )}
 
-      <div className="questions-list">
+      {/* Top Pagination */}
+      <Pagination {...paginationProps} className="pagination-top" />
+
+      <div className="questions-list" id="questions-container">
         {currentQuestions.map((question, index) => {
           const questionIndex = startIndex + index;
           const correctAnswers = question.correct_answer.split('');
@@ -496,39 +470,8 @@ const StudyMode: React.FC<StudyModeProps> = ({ questions, testName, testId }) =>
         })}
       </div>
 
-      <div className="pagination">
-        <button 
-          className="nav-btn prev-btn" 
-          onClick={() => goToPage(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          ← Previous
-        </button>
-        
-        <div className="page-buttons">
-          {getPaginationButtons()}
-          <form onSubmit={handlePageInputSubmit} className="page-input-form">
-            <input
-              type="number"
-              min="1"
-              max={totalPages}
-              value={pageInput}
-              onChange={handlePageInputChange}
-              placeholder={`Go to page (1-${totalPages})`}
-              className="page-input"
-            />
-            <button type="submit" className="page-input-btn">Go</button>
-          </form>
-        </div>
-        
-        <button 
-          className="nav-btn next-btn" 
-          onClick={() => goToPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next →
-        </button>
-      </div>
+      {/* Bottom Pagination */}
+      <Pagination {...paginationProps} className="pagination-bottom" />
 
       {showDiscussions !== null && (
         <Discussions

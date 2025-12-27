@@ -389,7 +389,7 @@ router.get('/mock-tests', [
       timeSpent: row.time_spent,
       completedAt: row.completed_at,
       passingScore: row.passing_score,
-      passed: row.score >= row.passing_score,
+      passed: Math.round((row.score / row.total_questions) * 100) >= row.passing_score,
       percentage: Math.round((row.score / row.total_questions) * 100)
     }));
 
@@ -487,7 +487,7 @@ router.get('/mock-tests/:mockTestId', [
         timeSpent: mockTest.time_spent,
         completedAt: mockTest.completed_at,
         passingScore: mockTest.passing_score,
-        passed: mockTest.score >= mockTest.passing_score,
+        passed: Math.round((mockTest.score / mockTest.total_questions) * 100) >= mockTest.passing_score,
         percentage: Math.round((mockTest.score / mockTest.total_questions) * 100)
       },
       answers

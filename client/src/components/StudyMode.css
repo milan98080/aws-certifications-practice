@@ -321,6 +321,15 @@
   gap: 16px;
 }
 
+.pagination-top {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.pagination-bottom {
+  margin-top: 20px;
+}
+
 .nav-btn {
   background: #7f8c8d;
   color: white;
@@ -443,21 +452,65 @@
   .choice {
     padding: 10px;
   }
+}
+
+@media (max-width: 480px) {
+  .study-mode {
+    padding: 10px;
+  }
   
-  .pagination {
+  .study-header {
+    padding: 16px;
+  }
+  
+  .study-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .progress-info {
+    font-size: 0.8rem;
     flex-direction: column;
-    gap: 12px;
+    gap: 4px;
+    align-items: flex-start;
   }
   
-  .page-buttons {
-    justify-content: center;
+  .saving-indicator {
+    font-size: 0.7rem;
   }
   
-  .page-input-form {
-    margin-left: 0;
+  .page-info {
+    font-size: 0.8rem;
   }
   
-  .page-input {
-    width: 120px;
+  .study-question {
+    padding: 16px;
+  }
+  
+  .question-header h3 {
+    font-size: 1rem;
+  }
+  
+  .question-text {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+  
+  .choice {
+    padding: 8px;
+  }
+  
+  .choice-label {
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+  }
+  
+  .choice-text {
+    font-size: 0.9rem;
+  }
+  
+  .submit-btn {
+    padding: 8px 16px;
+    font-size: 13px;
   }
 }

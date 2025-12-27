@@ -281,6 +281,15 @@
   margin-bottom: 16px;
 }
 
+.pagination-top {
+  margin-bottom: 20px;
+}
+
+.pagination-bottom {
+  margin-top: 20px;
+  margin-bottom: 16px;
+}
+
 .nav-btn {
   background: #6b7280;
   color: white;
@@ -382,7 +391,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .practice-mode {
-    margin: 10px;
+    padding: 15px;
   }
   
   .practice-question {
@@ -399,37 +408,55 @@
     font-size: 1.2rem;
   }
   
-  .pagination {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .page-buttons {
-    order: -1;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .page-input-form {
-    margin-left: 0;
-    margin-top: 10px;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .page-input {
-    width: 150px;
-  }
-  
-  .nav-btn {
-    width: 120px;
-  }
-  
   .choice {
     padding: 12px;
   }
   
   .choice-text {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .practice-mode {
+    padding: 10px;
+  }
+  
+  .practice-header {
+    padding: 12px 16px;
+  }
+  
+  .practice-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .page-info {
+    font-size: 13px;
+  }
+  
+  .practice-question {
+    padding: 16px 12px;
+  }
+  
+  .question-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .choice {
+    padding: 10px;
+  }
+  
+  .choice-label {
+    min-width: 18px;
+    font-size: 13px;
+  }
+  
+  .choice-text {
+    font-size: 13px;
+  }
+  
+  .submit-btn {
+    padding: 8px 16px;
+    font-size: 13px;
   }
 }

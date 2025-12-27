@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import QuestionCard from './QuestionCard';
 import QuizStats from './QuizStats';
 import { Question } from '../types';
+import './RandomPractice.css';
 
 interface RandomPracticeProps {
   questions: Question[];
@@ -24,6 +25,8 @@ const RandomPractice: React.FC<RandomPracticeProps> = ({ questions, testName }) 
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState(0);
   const [currentAnswerProcessed, setCurrentAnswerProcessed] = useState(false);
+  
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const initializeQuestions = () => {
     // Randomize the order of questions
@@ -90,7 +93,7 @@ const RandomPractice: React.FC<RandomPracticeProps> = ({ questions, testName }) 
   }
 
   return (
-    <div className="random-practice">
+    <div className="random-practice" ref={containerRef} id="random-practice-container">
       <QuizStats
         currentQuestion={answeredQuestions}
         totalQuestions={shuffledQuestions.length}
@@ -100,12 +103,14 @@ const RandomPractice: React.FC<RandomPracticeProps> = ({ questions, testName }) 
       />
       
       {currentQuestionIndex < shuffledQuestions.length && (
-        <QuestionCard
-          key={`random-${currentQuestionIndex}-${shuffledQuestions[currentQuestionIndex].question_id}`}
-          question={shuffledQuestions[currentQuestionIndex]}
-          onNext={handleNextQuestion}
-          onAnswerSubmitted={handleAnswerSubmitted}
-        />
+        <div id="current-question-container">
+          <QuestionCard
+            key={`random-question-card`}
+            question={shuffledQuestions[currentQuestionIndex]}
+            onNext={handleNextQuestion}
+            onAnswerSubmitted={handleAnswerSubmitted}
+          />
+        </div>
       )}
     </div>
   );

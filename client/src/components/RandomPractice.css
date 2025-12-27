@@ -1,0 +1,51 @@
+/* Hide scrollbars while maintaining scroll functionality */
+.random-practice {
+  scroll-behavior: auto !important; /* Prevent smooth scrolling that might cause jumps */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.random-practice::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.random-practice .question-card {
+  scroll-margin-top: 20px; /* Ensure proper spacing when scrolling to question */
+}
+
+/* Prevent layout shifts during question transitions */
+.random-practice #current-question-container {
+  min-height: 400px; /* Maintain consistent height to prevent layout shifts */
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent overflow */
+}
+
+/* Ensure stable positioning */
+.random-practice {
+  position: relative;
+  padding: 0; /* Remove padding to match other screens */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .random-practice {
+    padding: 0; /* Remove padding to match other screens */
+  }
+}
+
+/* Prevent any unwanted scroll behavior during transitions */
+.random-practice *, 
+.random-practice *::before, 
+.random-practice *::after {
+  scroll-behavior: auto !important;
+}
+
+/* Ensure body and html don't interfere with scroll position */
+html, body {
+  scroll-behavior: auto !important;
+}

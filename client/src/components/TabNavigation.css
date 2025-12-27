@@ -1,10 +1,15 @@
 .tab-navigation {
-  display: flex;
+  position: relative;
   background: white;
   border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Desktop Navigation */
+.desktop-tabs {
+  display: flex;
   padding: 0 32px;
   gap: 0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .tab-button {
@@ -43,10 +48,157 @@
   white-space: nowrap;
 }
 
+/* Mobile Navigation */
+.mobile-nav {
+  display: none;
+}
+
+.mobile-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #334155;
+}
+
+.current-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.current-tab .tab-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.current-tab .tab-label {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hamburger Icon */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #64748b;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Mobile Dropdown Menu */
+.mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.mobile-menu.open {
+  max-height: 400px;
+}
+
+.mobile-tab-button {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.mobile-tab-button:hover {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.mobile-tab-button.active {
+  background: #eff6ff;
+  color: #3b82f6;
+  border-left-color: #3b82f6;
+}
+
+.mobile-tab-button .tab-icon {
+  font-size: 20px;
+}
+
+.mobile-tab-button .tab-label {
+  font-weight: 500;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+  .desktop-tabs {
+    display: none;
+  }
+  
+  .mobile-nav {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
   .tab-navigation {
-    padding: 0 16px;
+    padding: 0 32px;
   }
   
   .tab-button {
@@ -60,5 +212,24 @@
   
   .tab-label {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-menu-button {
+    padding: 10px 12px;
+  }
+  
+  .current-tab .tab-label {
+    font-size: 12px;
+  }
+  
+  .current-tab .tab-icon {
+    font-size: 16px;
+  }
+  
+  .mobile-tab-button {
+    padding: 12px 14px;
+    font-size: 13px;
   }
 }
